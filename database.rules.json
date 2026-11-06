@@ -1,0 +1,27 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$roomCode": {
+        ".read": "auth != null",
+        ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || (!newData.exists() && data.child('hostUid').val() === auth.uid) || (data.exists() && !data.child('answer').exists() && data.child('hostUid').val() !== auth.uid && newData.child('hostUid').val() === data.child('hostUid').val() && newData.child('offer').child('type').val() === data.child('offer').child('type').val() && newData.child('offer').child('sdp').val() === data.child('offer').child('sdp').val() && newData.child('createdAt').val() === data.child('createdAt').val() && newData.child('answer').child('uid').val() === auth.uid && newData.child('answer').child('type').val() === 'answer' && newData.child('answer').child('sdp').isString()) || (data.exists() && now > data.child('createdAt').val() + 600000 && !newData.exists()))",
+        "hostUid": {
+          ".validate": "newData.isString()"
+        },
+        "offer": {
+          ".validate": "newData.child('type').val() === 'offer' && newData.child('sdp').isString()"
+        },
+        "answer": {
+          ".validate": "!newData.exists() || (newData.child('uid').isString() && newData.child('type').val() === 'answer' && newData.child('sdp').isString())"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}

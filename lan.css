@@ -1,0 +1,55 @@
+.join-inline textarea {
+  width: 235px;
+  height: 43px;
+  resize: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 13px 10px 0;
+  background: transparent;
+  border: 0;
+  color: white;
+  outline: none;
+  font: 10px var(--mono);
+}
+.join-inline textarea::placeholder { color: #657185; }
+.join-inline input#join-code { ime-mode: disabled; text-transform: uppercase; }
+.lan-steps { border-top: 1px solid var(--line); }
+.lan-steps p { display: flex; gap: 10px; align-items: baseline; margin: 0; padding: 14px 10px; border-bottom: 1px solid rgba(135,157,181,.09); color: #9aa7b7; font-size: 11px; line-height: 1.7; }
+.lan-steps p b { flex: 0 0 auto; color: var(--cyan); font: 9px var(--mono); }
+.lan-steps p strong { color: #dce4ed; }
+.lan-steps small { display: block; padding: 13px 10px; color: #68778b; font-size: 9px; line-height: 1.7; }
+.game-actions,.signal-actions { display: flex; align-items: center; gap: 8px; }
+.signal-button { border: 1px solid #30394a; background: transparent; padding: 7px 10px; color: #a6b3c2; font-size: 10px; }
+.signal-button:hover { border-color: var(--cyan); color: var(--cyan); }
+.signal-card { width: min(680px,100%); max-height: 92vh; overflow-y: auto; border: 1px solid #2b384b; background: #0c111b; padding: 26px; position: relative; box-shadow: 0 25px 100px #0008; }
+.signal-card h2 { font: 800 34px/.98 var(--display); margin: 14px 0; color: #eef2f7; }
+.signal-card>p { font-size: 11px; color: #9aa7b7; line-height: 1.7; }
+.signal-card label { display: block; margin: 14px 0 7px; color: #aab6c5; font-size: 10px; }
+.signal-card textarea { display: block; width: 100%; min-height: 88px; resize: vertical; background: #080d15; border: 1px solid #2b3848; color: #dce4ed; padding: 10px; outline: none; font: 9px/1.5 var(--mono); overflow-wrap: anywhere; }
+.signal-card textarea:focus { border-color: var(--cyan); }
+.signal-card textarea[readonly] { color: #9aa7b7; }
+.signal-card #signal-code { min-height: 48px; resize: none; text-align: center; font-size: 24px; letter-spacing: 5px; }
+.signal-card .signal-actions { justify-content: flex-end; margin-top: 8px; }
+.signal-card>.primary-button { width: 100%; justify-content: center; margin-top: 14px; }
+.ammo-pill { flex: 0 0 auto; border: 1px solid #293849; padding: 3px 6px; color: #74869a; font: 8px var(--mono); white-space: nowrap; }
+.ammo-pill b { color: #e0e8f1; font-weight: 600; }
+.hud-build { height: 15px; margin-top: 5px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; color: #84a1b6; font: 8px/15px var(--mono); scrollbar-width: none; }
+.hud-build::-webkit-scrollbar { display: none; }
+.hud-build span { display: inline-block; }
+.hud-right .hud-build { direction: rtl; }
+@media(max-width:760px) {
+  .hud-stats span:nth-child(2) { display: inline; }
+  .hud-name { gap: 5px; }
+  .ammo-pill { padding: 2px 4px; font-size: 7px; }
+}
+@media(max-width:760px) {
+  .join-inline textarea { width: min(42vw,235px); }
+  .lan-steps p { padding: 11px 8px; }
+  .signal-card { padding: 20px; }
+}
+@media(max-width:420px) {
+  .join-inline textarea { width: min(40vw,155px); }
+  .game-actions { gap: 5px; }
+  .signal-button,.leave-button { padding: 6px 7px; }
+  .signal-card h2 { font-size: 28px; }
+}

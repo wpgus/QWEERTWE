@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b13">
+  <title>VOID//DUEL — 로그라이크 아레나</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lan.css">
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="game.js?v=20261106-1545" defer></script>
+</head>
+<body>
+  <div class="grain"></div>
+  <main id="lobby-screen" class="screen lobby-screen">
+    <header class="topbar">
+      <a class="wordmark" href="#" aria-label="VOID DUEL 홈"><span class="mark">V</span><span>VOID<span class="slash">//</span>DUEL</span></a>
+      <div class="top-status"><span class="live-dot"></span> P2P ARENA <span class="top-divider"></span> SEASON 01</div>
+      <button class="icon-button" id="sound-button" title="사운드 토글" aria-label="사운드 토글">♫</button>
+    </header>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> TWO FIGHTERS. ONE SURVIVOR.</div>
+        <h1>ENTER THE<br><span>VOID.</span></h1>
+        <p>매 라운드 달라지는 빌드, 단 한 명의 생존자.<br>친구와 연결해 1대1 로그라이크 슈팅을 시작하세요.</p>
+        <div class="hero-actions">
+          <button class="primary-button" id="create-room"><span>＋</span> 방 만들기 <span class="button-arrow">↗</span></button>
+          <div class="join-inline"><input id="join-code" type="text" lang="en" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="8" placeholder="8자리 방 코드" autocomplete="off" aria-label="8자리 방 코드"><button id="join-room" aria-label="방 입장">입장 <span>→</span></button></div>
+        </div>
+        <div id="connection-status" class="connection-status">Firebase 방 코드로 연결할 수 있습니다</div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="crosshair crosshair-one">+</div><div class="crosshair crosshair-two">+</div>
+        <div class="fighter fighter-blue"><i></i><b></b><span></span></div>
+        <div class="fighter fighter-red"><i></i><b></b><span></span></div>
+        <div class="art-beam"></div><div class="art-label label-left">FIGHT<br><small>01 / 07</small></div>
+        <div class="art-label label-right">SURVIVE<br><small>NO RESPAWNS</small></div>
+        <div class="art-coordinates">35° 41' 22.2" N<br>139° 41' 30.1" E</div>
+      </div>
+    </section>
+    <section class="lobby-layout">
+      <div class="rooms-panel">
+        <div class="section-heading"><div><span class="section-kicker">FIREBASE SIGNALING · WEBRTC P2P</span><h2>초대 코드로 연결</h2></div></div>
+        <div class="lan-steps">
+          <p><b>01</b> 한 플레이어가 <strong>방 만들기</strong>를 눌러 8자리 방 코드를 만듭니다.</p>
+          <p><b>02</b> 다른 플레이어가 코드를 입력하면 연결이 자동으로 시작됩니다.</p>
+          <p><b>03</b> 연결이 완료되면 게임 데이터는 P2P로 직접 전달됩니다.</p>
+          <small>Firebase가 짧은 방 코드로 연결을 도와주고, 게임 데이터는 두 브라우저가 P2P로 직접 주고받습니다.</small>
+        </div>
+      </div>
+      <aside class="side-panel">
+        <div class="side-title"><span class="section-kicker">YOUR LOADOUT</span><span class="rank-pill">ROOKIE <b>01</b></span></div>
+        <div class="player-card"><div class="avatar">?</div><div><strong>익명의 도전자</strong><small>첫 전투를 기다리는 중</small></div><span class="online-dot"></span></div>
+        <div class="divider"></div>
+        <div class="how-title">전투 가이드 <span>CONTROLS</span></div>
+        <div class="control-list"><div><span><kbd>A</kbd><kbd>D</kbd></span><span>좌우 이동</span></div><div><kbd>SPACE</kbd><span>점프</span></div><div><kbd>S</kbd><span>숙이기 / 빠른 하강</span></div><div><kbd>W</kbd><span>가파른 경사 오르기</span></div><div><kbd>클릭</kbd><span>조준 및 발사</span></div><div><kbd>우클릭</kbd><span>0.5초 방어</span></div></div>
+        <div class="side-foot"><span>7 ROUNDS</span><span>·</span><span>BEST OF 3</span><span>·</span><span>ROGUELIKE</span></div>
+      </aside>
+    </section>
+    <footer class="page-footer"><span>VOID//DUEL <span class="footer-dim">— SURVIVE THE RUN.</span></span><span>BUILT FOR THE BRAVE <b>✳</b></span></footer>
+  </main>
+
+  <main id="game-screen" class="screen game-screen hidden">
+    <header class="game-topbar"><a class="wordmark" href="#"><span class="mark">V</span><span>VOID<span class="slash">//</span>DUEL</span></a><div class="match-info"><span id="round-label">ROUND 01 / 07</span><i></i><span id="bout-label">BOUT 1 / 3</span></div><div class="game-actions"><button class="signal-button hidden" id="show-signal">연결 코드</button><button class="leave-button" id="leave-game">나가기 <span>×</span></button></div></header>
+    <section class="arena-wrap">
+      <div class="player-hud hud-left"><div class="hud-name"><span class="player-chip blue-chip">01</span><span id="player-one-name">PLAYER 01</span><span class="ammo-pill">탄 <b id="ammo-one">12 / 12</b></span><span class="hud-state" id="player-one-state">READY</span></div><div class="health-track"><div id="health-one" class="health-fill blue-fill"></div></div><div class="hud-stats"><span>HP <b id="hp-one">100</b></span><span>WINS <b id="wins-one">0</b></span></div><div id="build-one" class="hud-build"><span dir="ltr">증강 없음</span></div></div>
+      <div class="center-vs">VS</div>
+      <div class="player-hud hud-right"><div class="hud-name"><span class="hud-state" id="player-two-state">READY</span><span class="ammo-pill">탄 <b id="ammo-two">12 / 12</b></span><span id="player-two-name">PLAYER 02</span><span class="player-chip red-chip">02</span></div><div class="health-track"><div id="health-two" class="health-fill red-fill"></div></div><div class="hud-stats"><span>WINS <b id="wins-two">0</b></span><span>HP <b id="hp-two">100</b></span></div><div id="build-two" class="hud-build"><span dir="ltr">증강 없음</span></div></div>
+      <div class="arena" id="arena"><canvas id="game-canvas" width="1000" height="500"></canvas><div id="arena-overlay" class="arena-overlay"><span class="overlay-kicker">WAITING FOR YOUR OPPONENT</span><h2>READY UP</h2><p>둘 다 준비되면 전투가 시작됩니다.</p><button id="ready-button" class="primary-button">전투 준비 <span>→</span></button></div><div id="countdown" class="countdown hidden">3</div></div>
+      <div class="arena-bottom"><span><i class="live-dot"></i> <span id="network-label">P2P 연결 대기</span></span><span>탄약 · HP · 증강은 각 플레이어 HUD</span><span>좌클릭 발사 <b>·</b> 우클릭 방어</span></div>
+    </section>
+    <div class="game-help"><span><kbd>A</kbd><kbd>D</kbd> 이동</span><span><kbd>SPACE</kbd> 점프</span><span><kbd>S</kbd> 숙이기</span><span><kbd>W</kbd> 경사 오르기</span><span><kbd>R</kbd> 재장전</span></div>
+    <div id="augment-modal" class="modal hidden"><div class="modal-card"><div class="eyebrow"><span class="eyebrow-line"></span> ROUND REWARD</div><h2>패배의 대가로,<br><span>더 강해져라.</span></h2><p>증강을 선택하세요. 이미 보유한 능력도 중복해서 강화할 수 있습니다.</p><div id="augment-options" class="augment-options"></div></div></div>
+    <div id="toast" class="toast hidden"></div>
+  </main>
+  <div id="password-modal" class="modal hidden"><form class="password-card" id="password-form"><button type="button" id="close-password" class="modal-close">×</button><div class="eyebrow"><span class="eyebrow-line"></span> PRIVATE ROOM</div><h2>비밀번호 입력</h2><p>방에 입장하려면 비밀번호가 필요합니다.</p><input id="room-password" type="password" placeholder="비밀번호" autocomplete="current-password"><button class="primary-button" type="submit">입장하기 <span>→</span></button></form></div>
+  <div id="signal-modal" class="modal hidden">
+    <section class="signal-card">
+      <button type="button" id="close-signal" class="modal-close" aria-label="닫기">×</button>
+      <div class="eyebrow"><span class="eyebrow-line"></span> LOCAL NETWORK P2P</div>
+      <h2 id="signal-title">초대 코드</h2>
+      <p id="signal-description"></p>
+      <label id="signal-code-label" for="signal-code">8자리 방 코드</label>
+      <textarea id="signal-code" spellcheck="false"></textarea>
+      <div class="signal-actions"><button type="button" id="signal-copy" class="signal-button">코드 복사</button></div>
+    </section>
+  </div>
+</body>
+</html>
